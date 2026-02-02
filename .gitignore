@@ -1,0 +1,22 @@
+# Node
+backend/node_modules/
+
+# Environment files
+.env
+backend/.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Build (if added later)
+dist/
+
+# Folder/files ignored for development purposes
+backend/create_admin.js
+backend/create_admin1.js
+backend/hash-password.js
+backend/uploads/
+frontend/assets/
