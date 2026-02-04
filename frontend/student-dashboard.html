@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/png" href="assets/favicon4.png"/>
+  <link rel="icon" type="image/png" href="assets/favicon4.png" />
   <title>CampusMate • Student Dashboard</title>
 
   <!-- Font -->
@@ -1186,20 +1186,25 @@
       absentEl.innerText = absent;
 
       listEl.innerHTML = "";
-      data
-        .slice(-7) // last 7 records
-        .reverse() // latest first
-        .forEach((a) => {
-          const row = document.createElement("div");
-          row.className = "d-flex justify-content-between py-2 border-bottom";
-          row.innerHTML = `
-        <div>${new Date(a.attendance_date).toDateString()}</div>
-        <div class="${a.status === "Present" ? "att-good" : "att-bad"}">
-          ${a.status}
-        </div>
-      `;
-          listEl.appendChild(row);
-        });
+      // sort by date (latest first)
+      const sorted = [...data].sort(
+        (a, b) => new Date(b.attendance_date) - new Date(a.attendance_date)
+      );
+
+      // take latest 7
+      sorted.slice(0, 7).forEach((a) => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between py-2 border-bottom";
+
+        row.innerHTML = `
+    <div>${new Date(a.attendance_date).toDateString()}</div>
+    <div class="${a.status === "Present" ? "att-good" : "att-bad"}">
+      ${a.status}
+    </div>
+  `;
+        listEl.appendChild(row);
+      });
+
     }
 
     // Calendar View Logic
