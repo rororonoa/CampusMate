@@ -83,7 +83,7 @@ Each role has **its own UI, permissions, and features**.
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone [text](https://github.com/rororonoa/CampusMate.git)
+git clone https://github.com/rororonoa/CampusMate.git
 cd campusmate
 ````
 
