@@ -1,83 +1,90 @@
-Perfect, thanks 👍
-Based on everything you shared, here is a **clean, professional `README.md`** you can **directly copy-paste** into your repo.
-
----
 
 ```md
-# 🎓 CampusMate – Smart Student Management System
+<h1 align="center">🎓 CampusMate</h1>
 
-CampusMate is a **role-based Student Management System** designed to digitize and simplify academic operations for colleges and schools.  
-It provides **separate portals** for **Admin**, **Teachers**, and **Students**, each with a distinct UI and controlled access.
+<p align="center">
+  <b>Smart Student Management System</b><br/>
+  Final Year Project • Full-Stack • Role-Based System
+</p>
 
-This project is developed as a **Final Year Project** and is also suitable for **portfolio showcase**.
+<p align="center">
+  <img src="https://img.shields.io/badge/Backend-Node.js-green"/>
+  <img src="https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-blue"/>
+  <img src="https://img.shields.io/badge/Database-MySQL-orange"/>
+  <img src="https://img.shields.io/badge/Auth-JWT-purple"/>
+</p>
 
 ---
 
-## 🚀 Features
+## 📌 About the Project
 
-### 👨‍💼 Admin Portal
-- Secure admin login
-- Manage teachers and students
-- Create and manage batches & courses
-- Assign teachers to batches
-- Send notifications to students and teachers
-- View overall system data
+**CampusMate** is a role-based Student Management System designed to digitize
+college academic workflows.
 
-### 👨‍🏫 Teacher Portal
-- Secure teacher login
-- View assigned students and batches
-- Mark and manage student attendance
-- Enter and update marks
-- Create, edit, and manage assignments
-- Review student submissions and give feedback
-- View notifications and profile details
+It provides **separate dashboards** for:
+- 👨‍💼 Admin
+- 👨‍🏫 Teacher
+- 👨‍🎓 Student  
 
-### 👨‍🎓 Student Portal
-- Secure student login
-- View attendance with performance indicators
-- View marks and academic performance
-- View and submit assignments
-- Receive notifications and announcements
-- Manage profile and change password
+Each role has **its own UI, permissions, and features**.
+
+✔ Final Year Project  
+✔ Portfolio-ready  
+✔ Real-world use case
+
+---
+
+## ✨ Features Overview
+
+### 👨‍💼 Admin
+- Manage teachers & students
+- Create courses and batches
+- Assign teachers
+- Send notifications
+- Monitor system data
+
+### 👨‍🏫 Teacher
+- View assigned students
+- Mark attendance
+- Enter marks
+- Create & manage assignments
+- Review submissions with feedback
+
+### 👨‍🎓 Student
+- View attendance & performance
+- View marks
+- Submit assignments
+- Receive notifications
+- Manage profile
 
 ---
 
 ## 🔐 Authentication & Security
-- JWT (JSON Web Token) based authentication
-- Role-based access control (Admin / Teacher / Student)
-- Protected routes on frontend
-- Passwords stored securely using hashing
+- JWT based authentication
+- Role-based access control
+- Protected routes
+- Password hashing (bcrypt)
+- Environment variables for secrets
 
 ---
 
 ## 🛠 Tech Stack
 
-### Frontend
-- HTML5
-- CSS3
-- JavaScript (Plain JS)
-- Bootstrap 5
-
-### Backend
-- Node.js
-- Express.js
-- MySQL
-
-### Other Tools & Libraries
-- JWT (jsonwebtoken)
-- bcrypt
-- dotenv
-- multer
-- express-validator
+| Layer | Technology |
+|-----|-----------|
+| Frontend | HTML, CSS, JavaScript, Bootstrap |
+| Backend | Node.js, Express.js |
+| Database | MySQL |
+| Auth | JWT |
+| Tools | bcrypt, dotenv, multer |
 
 ---
 
-## 📂 Project Structure (Single Repository)
+## 📂 Project Structure
 
 ```
 
 campusmate/
-│
 ├── backend/
 │   ├── routes/
 │   ├── controllers/
@@ -91,7 +98,6 @@ campusmate/
 │   └── student/
 │
 ├── screenshots/
-│
 ├── .gitignore
 └── README.md
 
@@ -99,26 +105,11 @@ campusmate/
 
 ---
 
-## 📸 Screenshots
-
-> Add screenshots inside the `screenshots/` folder and reference them like this:
-
-### Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
-
-### Teacher Dashboard
-![Teacher Dashboard](screenshots/teacher-dashboard.png)
-
-### Student Dashboard
-![Student Dashboard](screenshots/student-dashboard.png)
-
----
-
-## ⚙️ Setup Instructions (Local)
+## ⚙️ Setup Guide (Local)
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/your-username/campusmate.git
+git clone [https://github.com/your-username/campusmate.git](https://github.com/rororonoa/CampusMate)
 cd campusmate
 ````
 
@@ -129,14 +120,15 @@ cd backend
 npm install
 ```
 
-Create a `.env` file:
+Create `.env` inside `backend/`:
 
 ```env
-DB_HOST=
-DB_USER=
-DB_PASSWORD=
-DB_NAME=
-JWT_SECRET=
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=campusmate
+JWT_SECRET=your_secret_key
+PORT=5000
 ```
 
 Run backend:
@@ -147,26 +139,49 @@ npm run dev
 
 ### 3️⃣ Frontend Setup
 
-* Open frontend files using **Live Server**
-* Ensure API base URL matches backend server
+* Open frontend using **VS Code Live Server**
+* Ensure API URL:
+
+```js
+const API = "http://localhost:5000/api";
+```
+
+---
+
+## 📸 Screenshots
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+### Teacher Dashboard
+
+![Teacher Dashboard](screenshots/teacher-dashboard.png)
+
+### Student Dashboard
+
+![Student Dashboard](screenshots/student-dashboard.png)
 
 ---
 
 ## 🎯 Project Purpose
 
 * Final Year Academic Project
-* Real-world college management simulation
-* Portfolio-ready full-stack application
+* Demonstrates full-stack skills
+* Real-world student management system
+* Portfolio & resume ready
 
 ---
 
 ## 👤 Author
 
 **Sumeet Shetty**
-Final Year Student – BCA
+BCA – Final Year
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License**.
+MIT License
+
+```
