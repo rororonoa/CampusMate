@@ -1,5 +1,4 @@
 
-```md
 <h1 align="center">🎓 CampusMate</h1>
 
 <p align="center">
@@ -8,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Backend-Node.js-green"/>
-  <img src="https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-blue"/>
-  <img src="https://img.shields.io/badge/Database-MySQL-orange"/>
-  <img src="https://img.shields.io/badge/Auth-JWT-purple"/>
+  <img src="https://img.shields.io/badge/Backend-Node.js-green" />
+  <img src="https://img.shields.io/badge/Frontend-HTML%2FCSS%2FJS-blue" />
+  <img src="https://img.shields.io/badge/Database-MySQL-orange" />
+  <img src="https://img.shields.io/badge/Auth-JWT-purple" />
 </p>
 
 ---
@@ -77,31 +76,6 @@ Each role has **its own UI, permissions, and features**.
 | Database | MySQL |
 | Auth | JWT |
 | Tools | bcrypt, dotenv, multer |
-
----
-
-## 📂 Project Structure
-
-```
-
-campusmate/
-├── backend/
-│   ├── routes/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── server.js
-│   └── package.json
-│
-├── frontend/
-│   ├── admin/
-│   ├── teacher/
-│   └── student/
-│
-├── screenshots/
-├── .gitignore
-└── README.md
-
-````
 
 ---
 
@@ -183,5 +157,3 @@ BCA – Final Year
 ## 📜 License
 
 MIT License
-
-```
