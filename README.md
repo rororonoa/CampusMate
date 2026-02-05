@@ -1,5 +1,7 @@
-
-<h1 align="center">🎓 CampusMate</h1>
+<h1 align="center">
+  <img src="../campusmate/frontend/assets/favicon5.png" alt="CampusMate Logo" width="45" style="vertical-align: middle;" />
+  CampusMate
+</h1>
 
 <p align="center">
   <b>Smart Student Management System</b><br/>
@@ -21,9 +23,10 @@
 college academic workflows.
 
 It provides **separate dashboards** for:
+
 - 👨‍💼 Admin
 - 👨‍🏫 Teacher
-- 👨‍🎓 Student  
+- 👨‍🎓 Student
 
 Each role has **its own UI, permissions, and features**.
 
@@ -36,6 +39,7 @@ Each role has **its own UI, permissions, and features**.
 ## ✨ Features Overview
 
 ### 👨‍💼 Admin
+
 - Manage teachers & students
 - Create courses and batches
 - Assign teachers
@@ -43,6 +47,7 @@ Each role has **its own UI, permissions, and features**.
 - Monitor system data
 
 ### 👨‍🏫 Teacher
+
 - View assigned students
 - Mark attendance
 - Enter marks
@@ -50,6 +55,7 @@ Each role has **its own UI, permissions, and features**.
 - Review submissions with feedback
 
 ### 👨‍🎓 Student
+
 - View attendance & performance
 - View marks
 - Submit assignments
@@ -59,6 +65,7 @@ Each role has **its own UI, permissions, and features**.
 ---
 
 ## 🔐 Authentication & Security
+
 - JWT based authentication
 - Role-based access control
 - Protected routes
@@ -69,23 +76,24 @@ Each role has **its own UI, permissions, and features**.
 
 ## 🛠 Tech Stack
 
-| Layer | Technology |
-|-----|-----------|
+| Layer    | Technology                       |
+| -------- | -------------------------------- |
 | Frontend | HTML, CSS, JavaScript, Bootstrap |
-| Backend | Node.js, Express.js |
-| Database | MySQL |
-| Auth | JWT |
-| Tools | bcrypt, dotenv, multer |
+| Backend  | Node.js, Express.js              |
+| Database | MySQL                            |
+| Auth     | JWT                              |
+| Tools    | bcrypt, dotenv, multer           |
 
 ---
 
 ## ⚙️ Setup Guide (Local)
 
 ### 1️⃣ Clone Repository
+
 ```bash
 git clone https://github.com/rororonoa/CampusMate.git
 cd campusmate
-````
+```
 
 ### 2️⃣ Backend Setup
 
@@ -113,8 +121,8 @@ npm run dev
 
 ### 3️⃣ Frontend Setup
 
-* Open frontend using **VS Code Live Server**
-* Ensure API URL:
+- Open frontend using **VS Code Live Server**
+- Ensure API URL:
 
 ```js
 const API = "http://localhost:5000/api";
@@ -140,10 +148,10 @@ const API = "http://localhost:5000/api";
 
 ## 🎯 Project Purpose
 
-* Final Year Academic Project
-* Demonstrates full-stack skills
-* Real-world student management system
-* Portfolio & resume ready
+- Final Year Academic Project
+- Demonstrates full-stack skills
+- Real-world student management system
+- Portfolio & resume ready
 
 ---
 
