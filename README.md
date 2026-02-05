@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="../campusmate/frontend/assets/favicon5.png" alt="CampusMate Logo" width="45" style="vertical-align: middle;" />
+  <img src="./frontend/assets/favicon5.png" alt="CampusMate Logo" width="45" style="vertical-align: middle;" />
   CampusMate
 </h1>
 
