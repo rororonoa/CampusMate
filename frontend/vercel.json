@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/student",
-      "destination": "/student-login.html"
-    }
-  ]
-}
