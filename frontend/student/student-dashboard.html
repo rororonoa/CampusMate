@@ -1,0 +1,2149 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="assets/favicon4.png" />
+  <title>CampusMate • Student Dashboard</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, #1e293b, transparent 40%),
+        radial-gradient(circle at bottom right, #020617, transparent 40%),
+        linear-gradient(180deg, #020617, #020617);
+      color: #ffffff;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Layout */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      padding: 20px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .brand-muted {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 2px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 35px;
+    }
+
+    .brand h5 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .logout-link {
+      color: #fecaca;
+    }
+
+    .logout-link:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fff;
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .student-name {
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-card {
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .glass-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45);
+    }
+
+    .no-hover .glass-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .card-title {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .card-link {
+      font-size: 13px;
+      margin-top: 10px;
+      display: inline-block;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    .card-sub {
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .muted {
+      opacity: 0.65;
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    /* Notifications */
+    .notice {
+      font-size: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .notice:last-child {
+      border-bottom: none;
+    }
+
+    .notice.unread {
+      font-weight: 600;
+    }
+
+    .notice-date {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    /* Performance Circle */
+    .perf-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 6px solid #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    /* Progress bars */
+    /* ===== Performance Status Colors ===== */
+
+    /* AVERAGE */
+    .perf-average {
+      color: #facc15;
+      /* yellow */
+    }
+
+    .perf-average .perf-circle {
+      border-color: #facc15;
+    }
+
+    .perf-average .progress-bar {
+      background-color: #facc15;
+    }
+
+    /* POOR */
+    .perf-poor {
+      color: #ef4444;
+      /* red */
+    }
+
+    .perf-poor .perf-circle {
+      border-color: #ef4444;
+    }
+
+    .perf-poor .progress-bar {
+      background-color: #ef4444;
+    }
+
+    /* Eye button hover color */
+    .input-group .btn:hover {
+      background-color: #385ef8;
+      /* same blue as links */
+    }
+
+    /* Make assignment description modal transparent */
+    #assignmentDescModal .modal-content {
+      background: rgba(15, 23, 42, 0.75);
+      /* dark transparent */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Assignment Description Modal text fixes */
+    #assignmentDescModal .modal-title,
+    #assignmentDescModal h6,
+    #assignmentDescModal #descTitle,
+    #assignmentDescModal #descSubject {
+      color: #ffffff !important;
+    }
+
+    /* Red close (X) button */
+    #assignmentDescModal .btn-close {
+      filter: invert(33%) sepia(93%) saturate(6235%) hue-rotate(356deg) brightness(95%) contrast(115%);
+      opacity: 1;
+    }
+
+    #assignmentDescModal .btn-close:hover {
+      opacity: 0.85;
+    }
+
+    /* Assignment Submission Modal theme */
+    #submitAssignmentModal .modal-content {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e5e7eb;
+    }
+
+    /* Header & footer borders */
+    #submitAssignmentModal .modal-header,
+    #submitAssignmentModal .modal-footer {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Title text */
+    #submitAssignmentModal .modal-title {
+      color: #ffffff;
+    }
+
+    /* Red close (X) button */
+    #submitAssignmentModal .btn-close {
+      filter: invert(33%) sepia(93%) saturate(6235%) hue-rotate(356deg) brightness(95%) contrast(115%);
+      opacity: 1;
+    }
+
+    #submitAssignmentModal .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e5e7eb;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    #submitAssignmentModal .form-control::placeholder {
+      color: rgba(229, 231, 235, 0.6);
+    }
+
+    /* View Submission Modal theme */
+    #viewSubmissionModal .modal-content {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e5e7eb;
+    }
+
+    /* Header & footer borders */
+    #viewSubmissionModal .modal-header,
+    #viewSubmissionModal .modal-footer {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Title text */
+    #viewSubmissionModal .modal-title,
+    #viewSubmissionModal label {
+      color: #ffffff;
+    }
+
+    /* Form controls inside view modal */
+    #viewSubmissionModal .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e5e7eb;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Red close (X) button */
+    #viewSubmissionModal .btn-close {
+      filter: invert(33%) sepia(93%) saturate(6235%) hue-rotate(356deg) brightness(95%) contrast(115%);
+      opacity: 1;
+    }
+
+    #viewSubmissionModal a.btn {
+      border-color: rgba(56, 189, 248, 0.8);
+      color: #38bdf8;
+    }
+
+    #viewSubmissionModal a.btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #7dd3fc;
+    }
+
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding: 16px;
+      }
+    }
+
+    /* Logout Modal */
+    .logout-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.6);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .logout-modal {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 26px 24px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .logout-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.15);
+      /* soft red */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logout-icon i {
+      font-size: 26px;
+      color: #ef4444;
+      /* danger red */
+    }
+
+    .logout-modal h5 {
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .logout-modal p {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    .logout-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .logout-actions .btn {
+      flex: 1;
+      border-radius: 10px;
+    }
+
+    .att-good {
+      color: #22c55e;
+      /* green */
+    }
+
+    .att-warning {
+      color: #facc15;
+      /* yellow */
+    }
+
+    .att-bad {
+      color: #ef4444;
+      /* red */
+    }
+
+    .att-muted {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/favicon4.png" alt="CampusMate" />
+        <div>
+          <h5 class="mb-0">CampusMate</h5>
+          <div class="brand-muted">Student Portal</div>
+        </div>
+      </div>
+
+      <a href="#" class="nav-link active" data-page="dashboard">
+        <i class="bi bi-house"></i> Dashboard
+      </a>
+
+      <a href="#" class="nav-link" data-page="attendance">
+        <i class="bi bi-calendar-check"></i> Attendance
+      </a>
+
+      <a href="#" class="nav-link" data-page="marks">
+        <i class="bi bi-journal-text"></i> Marks
+      </a>
+
+      <a href="#" class="nav-link" data-page="notifications">
+        <i class="bi bi-bell"></i> Notifications
+        <span id="notifBadge" class="badge bg-danger ms-auto d-none">0</span>
+      </a>
+
+      <a href="#" class="nav-link" data-page="assignments">
+        <i class="bi bi-journal-bookmark"></i> Assignments
+      </a>
+
+      <a href="#" class="nav-link" data-page="profile"> <i class="bi bi-person"></i> Profile </a>
+      <hr style="border-color: rgba(255, 255, 255, 0.2)" />
+
+      <a href="#" class="nav-link logout-link" id="logoutBtn">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <h4 class="mb-0" id="pageTitle">Dashboard</h4>
+        <div class="student-name" id="studentName">Hi</div>
+      </div>
+      <div id="page-dashboard">
+        <!-- CARDS -->
+        <div class="cards mb-4">
+          <!-- Attendance Card-->
+          <div class="glass-card">
+            <div class="card-title">Attendance</div>
+            <div class="card-value" id="attendancePercent">--%</div>
+            <a href="#" class="card-link" id="viewAttendanceLink">View attendance</a>
+          </div>
+          <!-- Batch / Course Card-->
+          <div class="glass-card">
+            <div class="card-title">Batch & Course</div>
+            <div class="card-value" id="batchCourse">--</div>
+            <div class="card-sub muted" id="studentYear">--</div>
+            <div class="card-sub muted" id="teacherName">--</div>
+          </div>
+          <!-- Notifications Card -->
+          <div class="glass-card">
+            <div class="card-title">Notifications</div>
+            <div id="dashboardNotificationsList">
+              <div class="notice muted">Loading notifications...</div>
+            </div>
+            <a href="#" class="card-link" id="viewNotificationsLink">View all</a>
+          </div>
+        </div>
+        <!-- WELCOME CARD -->
+        <div class="glass-card">
+          <h5>Welcome to CampusMate 🎓</h5>
+          <p style="opacity: 0.85">
+            Here you can track your attendance, marks, assignment and stay updated with
+            college announcements.
+          </p>
+        </div>
+        <!-- STUDENT PERFORMANCE -->
+        <div class="glass-card mt-4" id="performanceCard">
+          <div class="card-title mb-3">Student Performance</div>
+
+          <div class="row">
+            <!-- Circular Score -->
+            <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+              <div class="perf-circle">
+                <span id="perfOverall">--%</span>
+              </div>
+              <div class="muted small mt-2">Performance Score</div>
+            </div>
+
+            <!-- Breakdown -->
+            <div class="col-md-8">
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small">
+                  <span>Attendance</span>
+                  <span id="perfAttText">--%</span>
+                </div>
+                <div class="progress">
+                  <div id="perfAttendance" class="progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small">
+                  <span>Marks</span>
+                  <span id="perfMarksText">--%</span>
+                </div>
+                <div class="progress">
+                  <div id="perfMarks" class="progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="d-flex justify-content-between small">
+                  <span>Assignments</span>
+                  <span id="perfAssignText">--%</span>
+                </div>
+                <div class="progress">
+                  <div id="perfAssignments" class="progress-bar" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div class="mt-3 fw-semibold">
+                Status:
+                <span id="perfStatus" class="ms-1 fw-semibold"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTENDANCE PAGE -->
+      <div id="page-attendance" class="d-none no-hover">
+        <!-- Attendance Summary -->
+        <div class="glass-card mb-4">
+          <div class="card-title">Overall Attendance</div>
+          <div class="card-value" id="attPagePercent">--%</div>
+
+          <div class="d-flex gap-4 mt-3 muted">
+            <div>Total: <span id="attTotal">--</span></div>
+            <div>Present: <span id="attPresent">--</span></div>
+            <div>Absent: <span id="attAbsent">--</span></div>
+          </div>
+        </div>
+
+        <!-- Attendance Message -->
+        <div class="glass-card mb-4" id="attMessageBox">
+          <div id="attMessageText" class="muted">
+            Checking your attendance...
+          </div>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="glass-card mb-4">
+          <div class="card-title">Check Attendance by Date</div>
+          <input type="date" id="attendanceDate" class="form-control mt-2" />
+          <button class="btn btn-primary mt-3" id="checkAttendanceBtn">
+            Check Attendance
+          </button>
+          <div id="calendarResult" class="mt-3 muted">
+            Select a date to view attendance
+          </div>
+        </div>
+
+        <!-- Last 7 Days Attendance -->
+        <div class="glass-card">
+          <div class="card-title">Last 7 Days Attendance</div>
+          <div id="attList" class="mt-3">
+            <div class="muted">Loading attendance...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARKS PAGE -->
+      <div id="page-marks" class="d-none">
+        <!-- Assessment Filter -->
+        <div class="glass-card mb-4">
+          <div class="card-title">Select Assessment</div>
+
+          <select id="assessmentSelect" class="form-select mt-2">
+            <option value="">Select assessment</option>
+          </select>
+
+          <button class="btn btn-primary mt-3" id="checkAssessmentBtn">
+            View Marks
+          </button>
+        </div>
+
+        <!-- Marks Summary -->
+        <div class="glass-card mb-4">
+          <div class="card-title">Marks Overview</div>
+
+          <div class="card-value muted" id="marksAverage">
+            Select assessment
+          </div>
+
+          <div class="d-flex gap-4 mt-3 muted">
+            <div>Semester: <span id="marksSemester">--</span></div>
+            <div>Subjects: <span id="marksSubjects">--</span></div>
+          </div>
+        </div>
+
+        <!-- Marks Message -->
+        <div class="glass-card mb-4" id="marksMessageBox">
+          <div id="marksMessageText" class="muted">
+            Please select an assessment to view marks.
+          </div>
+        </div>
+
+        <!-- Subject-wise Marks -->
+        <div class="glass-card">
+          <div class="card-title">Subject-wise Marks</div>
+          <div id="marksList" class="mt-3">
+            <div class="muted">No data to display</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS PAGE -->
+      <div id="page-notifications" class="d-none">
+        <!-- Notifications Summary -->
+        <div class="glass-card mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="card-title">Notifications</div>
+              <div>
+                All: <span id="notifTotal"></span>
+                &nbsp;&nbsp;Unread: <span id="notifUnread"></span>
+              </div>
+            </div>
+
+            <button id="markAllReadBtn" class="btn btn-sm btn-outline-light">
+              Mark all as read
+            </button>
+          </div>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="glass-card">
+          <div class="card-title">All Notifications</div>
+          <div id="notificationsList" class="mt-3">
+            <div class="muted">Loading notifications...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENTS PAGE -->
+      <div id="page-assignments" class="d-none no-hover">
+        <div class="glass-card mb-4">
+          <div class="card-title">Assignments</div>
+          <div class="muted">Assignments assigned to your batch</div>
+        </div>
+
+        <div class="glass-card">
+          <table class="table table-dark table-borderless align-middle">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="studentAssignmentsBody">
+              <tr>
+                <td colspan="5" class="muted">Loading assignments...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- PROFILE PAGE -->
+      <div id="page-profile" class="d-none no-hover">
+
+        <!-- Profile Info -->
+        <div class="glass-card mb-4 position-relative overflow-hidden">
+          <div class="ps-3">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <div class="card-title">Student Profile</div>
+                <div class="fw-semibold fs-4" id="profName">--</div>
+                <div class="muted small">
+                  <i class="bi bi-envelope"></i>
+                  <span id="profEmail">--</span>
+                </div>
+              </div>
+
+              <div class="text-end">
+                <div class="muted small">Status</div>
+                <div class="fw-bold fs-5 text-success" id="profStatus">
+                  Active
+                </div>
+              </div>
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.15)">
+
+            <!-- Info grid -->
+            <div class="row g-4 mt-1">
+
+              <div class="col-md-6">
+                <div class="muted small">
+                  <i class="bi bi-mortarboard"></i> Course
+                </div>
+                <div class="fw-semibold" id="profCourse">--</div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="muted small">
+                  <i class="bi bi-people"></i> Batch
+                </div>
+                <div class="fw-semibold" id="profBatch">--</div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="muted small">
+                  <i class="bi bi-calendar"></i> Academic Year
+                </div>
+                <div class="fw-semibold" id="profYear">--</div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="muted small">
+                  <i class="bi bi-hash"></i> Roll No
+                </div>
+                <div class="fw-semibold" id="profRoll">--</div>
+              </div>
+
+              <div class="col-12">
+                <div class="muted small">
+                  <i class="bi bi-person-badge"></i> Assigned Teacher
+                </div>
+                <div class="fw-semibold" id="profTeacher">--</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- School / College Info -->
+        <div class="glass-card mb-4">
+          <div class="card-title">School / College Information</div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-6">
+              <div class="muted small">Name</div>
+              <div class="fw-semibold" id="schoolName">--</div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="muted small">Email</div>
+              <div class="fw-semibold" id="schoolEmail">--</div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="muted small">Phone</div>
+              <div class="fw-semibold" id="schoolPhone">--</div>
+            </div>
+
+            <div class="col-12">
+              <div class="muted small">Address</div>
+              <div class="fw-semibold" id="schoolAddress">--</div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="muted small">Website</div>
+              <a href="#" target="_blank" class="fw-semibold" id="schoolWebsite">--</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="glass-card mt-4">
+          <div class="card-title mb-3">Change Password</div>
+
+          <div class="mb-3">
+            <label class="form-label">Current Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" />
+              <button class="btn btn-outline-light" type="button" onclick="togglePwd('currentPassword', this)">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" />
+              <button class="btn btn-outline-light" type="button" onclick="togglePwd('newPassword', this)">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Confirm New Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" />
+              <button class="btn btn-outline-light" type="button" onclick="togglePwd('confirmPassword', this)">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="changePasswordBtn">
+            Update Password
+          </button>
+
+          <div class="mt-3 muted" id="passwordMsg"></div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const API = "https://campusmate-backend-3x5c.onrender.com/api";
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    // 🔒 Protect dashboard
+    if (!token || role !== "student") {
+      window.location.href = "student-login.html";
+    }
+  </script>
+
+  <script>
+    async function loadStudentProfile() {
+      try {
+        const res = await fetch(API + "/students/me/profile", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        if (!res.ok) {
+          // token invalid / expired
+          localStorage.clear();
+          window.location.href = "student-login.html";
+          return;
+        }
+
+        const student = await res.json();
+        // Batch / Course + Year (from backend)
+        const batchCourseEl = document.getElementById("batchCourse");
+        const yearEl = document.getElementById("studentYear");
+
+        if (batchCourseEl && yearEl) {
+          const batch = student.batch; // FY / SY from DB
+          const course = student.course;
+          const year = student.year;
+
+          batchCourseEl.innerText = `${batch} • ${course}`;
+          yearEl.innerText = year;
+        }
+
+        // Assigned Teacher
+        const teacherEl = document.getElementById("teacherName");
+
+        if (teacherEl) {
+          if (student.teacher_name) {
+            teacherEl.innerText = `Prof: ${student.teacher_name}`;
+          } else {
+            teacherEl.innerText = "Prof: Not assigned";
+          }
+        }
+
+        // Show student name
+        const nameEl = document.getElementById("studentName");
+        if (student && student.name) {
+          nameEl.innerText = `Hello , ${student.name}`;
+        }
+
+        // OPTIONAL: store full profile for later pages
+        localStorage.setItem("studentProfile", JSON.stringify(student));
+      } catch (err) {
+        console.error("Profile load failed", err);
+        window.location.href = "student-login.html";
+      }
+    }
+
+    loadStudentProfile();
+
+    async function loadAttendance() {
+      const el = document.getElementById("attendancePercent");
+
+      try {
+        const res = await fetch(API + "/students/me/attendance", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        if (!res.ok) {
+          el.innerText = "--";
+          el.className = "card-value att-muted";
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+          el.innerText = "N/A";
+          el.className = "card-value att-muted";
+          return;
+        }
+
+        const total = data.length;
+        const present = data.filter((a) => a.status === "Present").length;
+        const percent = Math.round((present / total) * 100);
+
+        el.innerText = percent + "%";
+
+        // 🎨 Color logic
+        if (percent >= 75) {
+          el.className = "card-value att-good";
+        } else if (percent >= 60) {
+          el.className = "card-value att-warning";
+        } else {
+          el.className = "card-value att-bad";
+        }
+      } catch (err) {
+        console.error("Attendance load failed", err);
+        el.innerText = "--";
+        el.className = "card-value att-muted";
+      }
+    }
+
+    loadAttendance();
+
+    async function loadNotifications() {
+      const listEl = document.getElementById("dashboardNotificationsList");
+
+      try {
+        const res = await fetch(API + "/settings/notifications", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        if (!res.ok) {
+          listEl.innerHTML = `<div class="notice muted">Unable to load notifications</div>`;
+          return;
+        }
+
+        const result = await res.json();
+        const notifications = result.notifications || [];
+
+        if (notifications.length === 0) {
+          listEl.innerHTML = `<div class="notice muted">No notifications</div>`;
+          return;
+        }
+
+        listEl.innerHTML = "";
+
+        notifications.slice(0, 3).forEach((n) => {
+          const div = document.createElement("div");
+          div.className = "notice" + (n.read_at === null ? " unread" : "");
+
+          div.innerHTML = `
+          <div>${n.title}</div>
+          <div class="notice-date">
+            ${new Date(n.send_at).toLocaleDateString()}
+          </div>
+        `;
+
+          listEl.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Notifications load failed", err);
+        listEl.innerHTML = `<div class="notice muted">Error loading notifications</div>`;
+      }
+    }
+
+    loadNotifications();
+
+    async function loadStudentPerformance() {
+      // Attendance
+      const attRes = await fetch(API + "/students/me/attendance", {
+        headers: { Authorization: "Bearer " + token }
+      });
+      const att = await attRes.json();
+      const attPercent = att.length
+        ? Math.round(att.filter(a => a.status === "Present").length / att.length * 100)
+        : 0;
+
+      // Marks
+      const marksRes = await fetch(API + "/students/me/marks", {
+        headers: { Authorization: "Bearer " + token }
+      });
+      const marks = await marksRes.json();
+      let totalMarks = 0;
+      let totalMax = 0;
+
+      marks.forEach(m => {
+        if (m.marks !== null && m.max_marks !== null) {
+          totalMarks += m.marks;
+          totalMax += m.max_marks;
+        }
+      });
+
+      const marksPercent = totalMax
+        ? Math.round((totalMarks / totalMax) * 100)
+        : 0;
+
+      // Assignments
+      const asgRes = await fetch(API + "/assignments/student", {
+        headers: { Authorization: "Bearer " + token }
+      });
+      const asg = await asgRes.json();
+      const submitted = asg.filter(a => a.submitted_at).length;
+      const assignPercent = asg.length
+        ? Math.round((submitted / asg.length) * 100)
+        : 0;
+
+      // Overall score (weighted)
+      const overall = Math.round(
+        attPercent * 0.4 +
+        marksPercent * 0.4 +
+        assignPercent * 0.2
+      );
+
+      // UI updates
+      document.getElementById("perfOverall").innerText = overall + "%";
+
+      document.getElementById("perfAttendance").style.width = attPercent + "%";
+      document.getElementById("perfAttText").innerText = attPercent + "%";
+
+      document.getElementById("perfMarks").style.width = marksPercent + "%";
+      document.getElementById("perfMarksText").innerText = marksPercent + "%";
+
+      document.getElementById("perfAssignments").style.width = assignPercent + "%";
+      document.getElementById("perfAssignText").innerText = assignPercent + "%";
+
+      const card = document.getElementById("performanceCard");
+      const statusEl = document.getElementById("perfStatus");
+
+      // reset
+      card.classList.remove("perf-average", "perf-poor");
+      statusEl.className = "ms-1"; // reset color
+
+      let statusText = "";
+
+      if (overall >= 75) {
+        statusText = "Excellent!! Keep it up";
+        statusEl.classList.add("text-success"); // ✅ ONLY text green
+      } else if (overall >= 60) {
+        card.classList.add("perf-average");
+        statusText = "Average";
+        statusEl.classList.add("text-warning");
+      } else {
+        card.classList.add("perf-poor");
+        statusText = "Needs Improvement";
+        statusEl.classList.add("text-danger");
+      }
+
+      statusEl.innerText = statusText;
+    }
+
+    loadStudentPerformance();
+  </script>
+
+  <script>
+    // Attendance Page Load
+    let attendanceCache = [];
+    async function loadAttendancePage() {
+      const percentEl = document.getElementById("attPagePercent");
+      const totalEl = document.getElementById("attTotal");
+      const presentEl = document.getElementById("attPresent");
+      const absentEl = document.getElementById("attAbsent");
+      const msgText = document.getElementById("attMessageText");
+      const listEl = document.getElementById("attList");
+
+      const res = await fetch(API + "/students/me/attendance", {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      const data = await res.json();
+      attendanceCache = data; // cache for later use
+      if (!data.length) {
+        msgText.innerText = "No attendance records available.";
+        return;
+      }
+
+      const total = data.length;
+      const present = data.filter((a) => a.status === "Present").length;
+      const absent = total - present;
+      const percent = Math.round((present / total) * 100);
+
+      percentEl.innerText = percent + "%";
+      // Color logic
+      if (percent >= 75) {
+        percentEl.className = "card-value att-good";
+      } else if (percent >= 60) {
+        percentEl.className = "card-value att-warning";
+      } else {
+        percentEl.className = "card-value att-bad";
+      }
+      // Message logic
+      if (percent >= 75) {
+        msgText.innerText =
+          "✅ Great job! Your attendance is above the required minimum.";
+      } else if (percent >= 60) {
+        msgText.innerText =
+          "⚠️ Your attendance is slightly low. Try to attend regularly.";
+      } else {
+        msgText.innerText =
+          "❗ Attendance is critically low. Please attend upcoming classes.";
+      }
+      totalEl.innerText = total;
+      presentEl.innerText = present;
+      absentEl.innerText = absent;
+
+      listEl.innerHTML = "";
+      // sort by date (latest first)
+      const sorted = [...data].sort(
+        (a, b) => new Date(b.attendance_date) - new Date(a.attendance_date)
+      );
+
+      // take latest 7
+      sorted.slice(0, 7).forEach((a) => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between py-2 border-bottom";
+
+        row.innerHTML = `
+    <div>${new Date(a.attendance_date).toDateString()}</div>
+    <div class="${a.status === "Present" ? "att-good" : "att-bad"}">
+      ${a.status}
+    </div>
+  `;
+        listEl.appendChild(row);
+      });
+
+    }
+
+    // Calendar View Logic
+    const dateInput = document.getElementById("attendanceDate");
+    const calendarResult = document.getElementById("calendarResult");
+    const checkBtn = document.getElementById("checkAttendanceBtn");
+
+    checkBtn.addEventListener("click", async () => {
+      const selectedDate = dateInput.value;
+
+      if (!selectedDate) {
+        calendarResult.innerHTML = `<span class="att-warning">⚠️ Please select a date</span>`;
+        return;
+      }
+
+      const data = attendanceCache;
+
+      const record = data.find((a) => {
+        const d = new Date(a.attendance_date);
+
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+
+        const dbDate = `${yyyy}-${mm}-${dd}`;
+        return dbDate === selectedDate;
+      });
+
+      if (!record) {
+        calendarResult.innerHTML = `<span class="att-warning">⚠️ Not marked for this day</span>`;
+        return;
+      }
+
+      if (record.status === "Present") {
+        calendarResult.innerHTML = `<span class="att-good">✅ Present</span>`;
+      } else {
+        calendarResult.innerHTML = `<span class="att-bad">❌ Absent</span>`;
+      }
+    });
+
+    // Marks Page Load
+    let marksCache = [];
+    async function loadMarksPage() {
+      const avgEl = document.getElementById("marksAverage");
+      const semEl = document.getElementById("marksSemester");
+      const subEl = document.getElementById("marksSubjects");
+      const msgEl = document.getElementById("marksMessageText");
+      const listEl = document.getElementById("marksList");
+
+      const res = await fetch(API + "/students/me/marks", {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      const data = await res.json();
+      marksCache = data;
+      populateAssessmentOptions(data);
+    }
+
+    // Populate assessment dropdown
+    function populateAssessmentOptions(data) {
+      const select = document.getElementById("assessmentSelect");
+
+      // clear existing (except first option)
+      select.innerHTML = `<option value="">Select assessment</option>`;
+
+      const assessments = [...new Set(data.map((m) => m.assessment))];
+
+      assessments.forEach((a) => {
+        const opt = document.createElement("option");
+        opt.value = a;
+        opt.innerText = a;
+        select.appendChild(opt);
+      });
+    }
+
+    // Handle “View Marks” Button
+    const assessmentSelect = document.getElementById("assessmentSelect");
+    const checkAssessmentBtn = document.getElementById("checkAssessmentBtn");
+
+    checkAssessmentBtn.addEventListener("click", () => {
+      const assessment = assessmentSelect.value;
+
+      if (!assessment) {
+        alert("Please select an assessment");
+        return;
+      }
+      renderMarksByAssessment(assessment);
+    });
+
+    // Render marks for selected assessment
+    function renderMarksByAssessment(assessment) {
+      const avgEl = document.getElementById("marksAverage");
+      const semEl = document.getElementById("marksSemester");
+      const subEl = document.getElementById("marksSubjects");
+      const msgEl = document.getElementById("marksMessageText");
+      const listEl = document.getElementById("marksList");
+
+      const filtered = marksCache.filter((m) => m.assessment === assessment);
+
+      if (!filtered.length) {
+        avgEl.innerText = "N/A";
+        msgEl.innerText = "Marks not available for this assessment.";
+        listEl.innerHTML = `<div class="muted">No data</div>`;
+        return;
+      }
+
+      const latestSemester = Math.max(...filtered.map((m) => m.semester));
+      const semesterMarks = filtered.filter(
+        (m) => m.semester === latestSemester,
+      );
+
+      const totalObtained = semesterMarks.reduce(
+        (sum, m) => sum + m.marks,
+        0,
+      );
+      const totalMax = semesterMarks.reduce((sum, m) => sum + m.max_marks, 0);
+
+      const avg = Math.round((totalObtained / totalMax) * 100);
+
+      // Overview
+      avgEl.innerText = avg + "%";
+      semEl.innerText = `Semester ${latestSemester}`;
+      subEl.innerText = semesterMarks.length;
+
+      // Color
+      avgEl.className = "card-value";
+      if (avg >= 75) avgEl.classList.add("att-good");
+      else if (avg >= 60) avgEl.classList.add("att-warning");
+      else avgEl.classList.add("att-bad");
+
+      // Message
+      if (avg >= 75) {
+        msgEl.innerText = "✅ Great job! You’re performing well.";
+      } else if (avg >= 60) {
+        msgEl.innerText = "⚠️ You’re doing okay, but can improve.";
+      } else {
+        msgEl.innerText = "❗ Marks are low. Focus on weak subjects.";
+      }
+
+      // Subject-wise list
+      listEl.innerHTML = "";
+
+      semesterMarks.forEach((m) => {
+        const row = document.createElement("div");
+        row.className = "d-flex justify-content-between py-2 border-bottom";
+
+        row.innerHTML = `
+      <div><strong>${m.subject}</strong></div>
+      <div class="${m.marks >= m.max_marks * 0.6 ? "att-good" : "att-bad"}">
+        ${m.marks} / ${m.max_marks}
+      </div>
+    `;
+
+        listEl.appendChild(row);
+      });
+    }
+
+    // Notifications Page Load
+    async function loadNotificationsPage() {
+      const totalEl = document.getElementById("notifTotal");
+      const unreadEl = document.getElementById("notifUnread");
+      const listEl = document.getElementById("notificationsList");
+
+      const res = await fetch(API + "/settings/notifications", {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      const data = await res.json();
+      const notifications = data.notifications || [];
+
+      // counts
+      totalEl.innerText = notifications.length;
+      const unreadCount = notifications.filter(
+        (n) => n.read_at === null,
+      ).length;
+      unreadEl.innerText = unreadCount;
+
+      if (!notifications.length) {
+        listEl.innerHTML = `<div class="muted">You have no notifications.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = "";
+
+      notifications.forEach((n) => {
+        const isUnread = n.read_at === null;
+
+        const item = document.createElement("div");
+        item.className =
+          "d-flex justify-content-between align-items-start py-3 border-bottom";
+
+        item.innerHTML = `
+            <div>
+              <div class="${isUnread ? "fw-bold" : ""} notification-title">
+                ${n.title}
+            </div>
+            <div class="muted notification-message" style="display:none;">
+              ${n.message}
+            </div>
+
+          <div class="muted small mt-1">
+            ${new Date(n.send_at).toLocaleString()}
+          </div>
+        </div>
+      `;
+
+        item.style.cursor = "pointer";
+        item.addEventListener("click", async () => {
+          const msg = item.querySelector(".notification-message");
+
+          // Toggle message only
+          msg.style.display = msg.style.display === "none" ? "block" : "none";
+        });
+
+        listEl.appendChild(item);
+      });
+    }
+
+    // Unread Badge Update
+    async function updateUnreadBadge() {
+      const badge = document.getElementById("notifBadge");
+
+      const res = await fetch(API + "/settings/notifications", {
+        headers: { Authorization: "Bearer " + token }
+      });
+
+      const data = await res.json();
+      const notifications = data.notifications || [];
+
+      const unreadCount = notifications.filter(n => n.read_at === null).length;
+
+      if (unreadCount > 0) {
+        badge.innerText = unreadCount;
+        badge.classList.remove("d-none");
+      } else {
+        badge.classList.add("d-none");
+      }
+    }
+
+    // Mark All as Read Button
+    const markAllBtn = document.getElementById("markAllReadBtn");
+
+    if (markAllBtn) {
+      markAllBtn.addEventListener("click", async () => {
+        try {
+          await fetch(`${API}/settings/notifications/read-all`, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + token }
+          });
+
+          await loadNotificationsPage();
+          await updateUnreadBadge();
+        } catch (err) {
+          console.error("Mark all read failed", err);
+        }
+      });
+    }
+
+
+    // Load Assignments for Student
+    async function loadStudentAssignments() {
+      const tbody = document.getElementById("studentAssignmentsBody");
+
+      try {
+        const res = await fetch(API + "/assignments/student", {
+          headers: { Authorization: "Bearer " + token }
+        });
+
+        if (!res.ok) {
+          tbody.innerHTML =
+            `<tr><td colspan="5" class="muted">Failed to load assignments</td></tr>`;
+          return;
+        }
+
+        const list = await res.json();
+        tbody.innerHTML = "";
+
+        if (!list.length) {
+          tbody.innerHTML =
+            `<tr><td colspan="5" class="muted">No assignments</td></tr>`;
+          return;
+        }
+
+        list.forEach(a => {
+          let status = "Not submitted";
+          let badge = "secondary";
+
+          if (a.submitted_at) {
+            status = a.marks !== null ? "Reviewed" : "Submitted";
+            badge = a.marks !== null ? "success" : "warning";
+          }
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td>${a.title}</td>
+        <td>${a.subject}</td>
+        <td>${a.due_date ? formatDateOnly(a.due_date) : "—"}</td>
+        <td><span class="badge bg-${badge}">${status}</span></td>
+      `;
+          const descBtn = document.createElement("button");
+          descBtn.className = "btn btn-sm btn-outline-info me-2";
+          descBtn.innerText = "Description";
+          descBtn.addEventListener("click", () => openAssignmentDesc(a));
+
+          const actionTd = document.createElement("td");
+          actionTd.appendChild(descBtn);
+
+          if (a.submitted_at) {
+            // VIEW button (after submission)
+            const viewBtn = document.createElement("button");
+            viewBtn.className = "btn btn-sm btn-outline-success";
+            viewBtn.innerText = "View";
+            viewBtn.addEventListener("click", () => openViewSubmission(a));
+            actionTd.appendChild(viewBtn);
+          } else {
+            // SUBMIT button (before submission)
+            const submitBtn = document.createElement("button");
+            submitBtn.className = "btn btn-sm btn-primary";
+            submitBtn.innerText = "Submit";
+            submitBtn.addEventListener("click", () => openSubmitAssignment(a));
+            actionTd.appendChild(submitBtn);
+          }
+
+          tr.appendChild(actionTd);
+
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error("loadStudentAssignments", err);
+      }
+    }
+
+    function formatDateOnly(dateStr) {
+      if (!dateStr) return "—";
+      const d = new Date(dateStr);
+      if (isNaN(d)) return "—";
+
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function openAssignmentDesc(a) {
+      document.getElementById("descTitle").innerText = a.title;
+      document.getElementById("descSubject").innerText =
+        "Subject: " + a.subject;
+
+      document.getElementById("descBody").innerText =
+        a.description || "No description provided";
+
+      new bootstrap.Modal(
+        document.getElementById("assignmentDescModal")
+      ).show();
+    }
+
+    let currentAssignmentId = null;
+    function openSubmitAssignment(a) {
+      currentAssignmentId = a.id;
+
+      document.getElementById("submissionText").value = "";
+      document.getElementById("submitMsg").innerText = "";
+
+      new bootstrap.Modal(
+        document.getElementById("submitAssignmentModal")
+      ).show();
+    }
+
+    // Handle Assignment Submission
+    document.addEventListener("DOMContentLoaded", () => {
+      const submitBtn = document.getElementById("submitAssignmentBtn");
+      if (!submitBtn) return;
+
+      submitBtn.addEventListener("click", async () => {
+        const msg = document.getElementById("submitMsg");
+        const fileInput = document.getElementById("submissionFile");
+        const textInput = document.getElementById("submissionText");
+
+        msg.innerText = "";
+
+        if (!currentAssignmentId) {
+          msg.innerText = "Invalid assignment";
+          msg.className = "text-danger small";
+          return;
+        }
+
+        if (!fileInput.files.length) {
+          msg.innerText = "Please upload the assignment file";
+          msg.className = "text-danger small";
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        if (textInput.value.trim()) {
+          formData.append(
+            "submission_text",
+            textInput.value.trim()
+          );
+        }
+
+        try {
+          const res = await fetch(
+            API + `/assignments/${currentAssignmentId}/submit`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+              body: formData,
+            }
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            msg.innerText = data.message || "Submission failed";
+            msg.className = "text-danger small";
+            return;
+          }
+
+          bootstrap.Modal.getInstance(
+            document.getElementById("submitAssignmentModal")
+          ).hide();
+
+          showToast("Assignment submitted successfully");
+
+          currentAssignmentId = null;
+          loadStudentAssignments();
+        } catch (err) {
+          console.error("submit assignment", err);
+          msg.innerText = "Server error";
+          msg.className = "text-danger small";
+        }
+      });
+    });
+
+    // View Submission Modal
+    function openViewSubmission(a) {
+      const fileBtn = document.getElementById("viewSubmissionFile");
+      const textBox = document.getElementById("viewSubmissionText");
+
+      if (a.file_path) {
+        fileBtn.href = API.replace("/api", "") +
+          "/uploads/assignments/" + a.file_path;
+        fileBtn.style.display = "inline-block";
+      } else {
+        fileBtn.style.display = "none";
+      }
+
+      // ===== MARKS & FEEDBACK =====
+      const marksInput = document.getElementById("viewMarks");
+      const feedbackInput = document.getElementById("viewFeedback");
+
+      if (a.marks !== null && a.marks !== undefined) {
+        marksInput.value = `${a.marks} / 10`;
+      } else {
+        marksInput.value = "";
+        marksInput.placeholder = "Not reviewed yet";
+      }
+
+      if (a.feedback) {
+        feedbackInput.value = a.feedback;
+      } else {
+        feedbackInput.value = "";
+        feedbackInput.placeholder = "No feedback yet";
+      }
+
+      textBox.innerText =
+        a.submission_text || "No message provided";
+
+      new bootstrap.Modal(
+        document.getElementById("viewSubmissionModal")
+      ).show();
+    }
+
+
+    // Profile Page Load
+    function loadProfilePage() {
+      const profile = JSON.parse(localStorage.getItem("studentProfile"));
+
+      if (!profile) return;
+
+      document.getElementById("profName").innerText = profile.name || "--";
+      document.getElementById("profEmail").innerText = profile.email || "--";
+      document.getElementById("profRoll").innerText = profile.roll_no || "--";
+      document.getElementById("profCourse").innerText = profile.course || "--";
+      document.getElementById("profBatch").innerText = profile.batch || "--";
+      document.getElementById("profYear").innerText = profile.year || "--";
+      document.getElementById("profTeacher").innerText =
+        profile.teacher_name ? `Prof: ${profile.teacher_name}` : "Not assigned";
+    }
+
+    // Change Password Logic
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+    if (changePasswordBtn) {
+      changePasswordBtn.addEventListener("click", async () => {
+        const currentPassword = document.getElementById("currentPassword").value.trim();
+        const newPassword = document.getElementById("newPassword").value.trim();
+        const confirmPassword = document.getElementById("confirmPassword").value.trim();
+        const msgEl = document.getElementById("passwordMsg");
+
+        // reset message
+        msgEl.innerText = "";
+        msgEl.className = "mt-3";
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+          msgEl.innerText = "All fields are required.";
+          msgEl.className = "text-danger mt-3";
+          return;
+        }
+
+        if (newPassword.length < 6) {
+          msgEl.innerText = "Password must be at least 6 characters.";
+          msgEl.className = "text-danger mt-3";
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          msgEl.innerText = "New passwords do not match.";
+          msgEl.className = "text-danger mt-3";
+          return;
+        }
+
+        try {
+          const res = await fetch(`${API}/students/me/change-password`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              oldPassword: currentPassword,
+              newPassword,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            msgEl.innerText = data.message || "Failed to update password.";
+            msgEl.className = "text-danger mt-3";
+            return;
+          }
+
+          msgEl.innerText = "Password updated successfully.";
+          msgEl.className = "text-success mt-3";
+
+          // clear inputs
+          document.getElementById("currentPassword").value = "";
+          document.getElementById("newPassword").value = "";
+          document.getElementById("confirmPassword").value = "";
+
+        } catch (err) {
+          console.error(err);
+          msgEl.innerText = "Server error. Try again.";
+        }
+      });
+    }
+
+    // Toggle password visibility
+    function togglePwd(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+      }
+    }
+
+    // School Info Load
+    async function loadSchoolInfo() {
+      try {
+        const res = await fetch(`${API}/settings/school`, {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+
+        if (!res.ok) return;
+
+        const school = await res.json();
+        if (!school) return;
+
+        document.getElementById("schoolName").innerText = school.name || "--";
+        document.getElementById("schoolEmail").innerText = school.email || "--";
+        document.getElementById("schoolPhone").innerText = school.phone || "--";
+        document.getElementById("schoolAddress").innerText = school.address || "--";
+
+        const websiteEl = document.getElementById("schoolWebsite");
+        if (school.website) {
+          websiteEl.innerText = school.website;
+          websiteEl.href = school.website.startsWith("http")
+            ? school.website
+            : "https://" + school.website;
+        } else {
+          websiteEl.innerText = "--";
+          websiteEl.removeAttribute("href");
+        }
+
+      } catch (err) {
+        console.error("Failed to load school info", err);
+      }
+    }
+  </script>
+
+  <script>
+    // Page Switching Logic
+    const pageLinks = document.querySelectorAll(".nav-link[data-page]");
+
+    pageLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // active state
+        pageLinks.forEach((l) => l.classList.remove("active"));
+        link.classList.add("active");
+
+        const page = link.dataset.page;
+
+        const pageTitle = document.getElementById("pageTitle");
+        if (page === "dashboard") pageTitle.innerText = "Dashboard";
+        if (page === "attendance") pageTitle.innerText = "Attendance";
+        if (page === "marks") pageTitle.innerText = "Marks";
+        if (page === "notifications") pageTitle.innerText = "Notifications";
+        if (page === "assignments") {
+          document.getElementById("pageTitle").innerText = "Assignments";
+          loadStudentAssignments();
+        }
+        if (page === "profile") pageTitle.innerText = "Profile";
+
+        // hide all pages
+        document.getElementById("page-dashboard").classList.add("d-none");
+        document.getElementById("page-attendance").classList.add("d-none");
+        document.getElementById("page-marks").classList.add("d-none");
+        document.getElementById("page-notifications").classList.add("d-none");
+        document.getElementById("page-assignments").classList.add("d-none");
+        document.getElementById("page-profile").classList.add("d-none");
+
+        // show selected
+        document.getElementById("page-" + page).classList.remove("d-none");
+
+        // load pages only when needed
+        if (page === "attendance") {
+          loadAttendancePage();
+        }
+
+        if (page === "marks") {
+          // reset marks UI
+          document.getElementById("marksAverage").innerText =
+            "Select assessment";
+          document.getElementById("marksAverage").className =
+            "card-value muted";
+          document.getElementById("marksSemester").innerText = "--";
+          document.getElementById("marksSubjects").innerText = "--";
+          document.getElementById("marksMessageText").innerText =
+            "Please select an assessment to view marks.";
+          document.getElementById("marksList").innerHTML =
+            `<div class="muted">No data to display</div>`;
+
+          loadMarksPage();
+        }
+
+        if (page === "notifications") {
+          loadNotificationsPage();
+        }
+
+        if (page === "profile") {
+          loadProfilePage();
+          loadSchoolInfo();
+        }
+      });
+    });
+
+    // "View Attendance" link on Dashboard Attendance Card
+    const viewAttendanceLink = document.getElementById("viewAttendanceLink");
+    if (viewAttendanceLink) {
+      viewAttendanceLink.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // activate Attendance sidebar link
+        document
+          .querySelectorAll(".nav-link[data-page]")
+          .forEach((l) => l.classList.remove("active"));
+
+        const attendanceNav = document.querySelector(
+          '.nav-link[data-page="attendance"]',
+        );
+        attendanceNav.classList.add("active");
+
+        // hide dashboard, show attendance
+        document.getElementById("page-dashboard").classList.add("d-none");
+        document.getElementById("page-attendance").classList.remove("d-none");
+        document.getElementById("page-marks").classList.add("d-none");
+        document.getElementById("page-assignments").classList.add("d-none");
+        document.getElementById("page-profile").classList.add("d-none");
+
+        // load attendance data
+        loadAttendancePage();
+      });
+    }
+
+    // "View all" link on Dashboard Notifications Card
+    const viewNotificationsLink = document.getElementById("viewNotificationsLink");
+    if (viewNotificationsLink) {
+      viewNotificationsLink.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // deactivate all sidebar links
+        document
+          .querySelectorAll(".nav-link[data-page]")
+          .forEach((l) => l.classList.remove("active"));
+
+        // activate Notifications sidebar link
+        const notifNav = document.querySelector(
+          '.nav-link[data-page="notifications"]'
+        );
+        notifNav.classList.add("active");
+
+        // update title
+        document.getElementById("pageTitle").innerText = "Notifications";
+
+        // hide all pages
+        document.getElementById("page-dashboard").classList.add("d-none");
+        document.getElementById("page-attendance").classList.add("d-none");
+        document.getElementById("page-marks").classList.add("d-none");
+        document.getElementById("page-assignments").classList.add("d-none");
+        document.getElementById("page-profile").classList.add("d-none");
+
+        // show notifications page
+        document
+          .getElementById("page-notifications")
+          .classList.remove("d-none");
+
+        // load notifications
+        loadNotificationsPage();
+      });
+    }
+
+  </script>
+
+  <!-- Assignment Description Modal -->
+  <div class="modal fade" id="assignmentDescModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Assignment Description</h6>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <h6 id="descTitle" class="mb-2"></h6>
+          <p id="descSubject" class="text-muted small mb-3"></p>
+
+          <div id="descBody" class="form-control" style="height:auto; background:#1f2937; color:#e5e7eb"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Assignment Modal -->
+  <div class="modal fade" id="submitAssignmentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h6 class="modal-title mb-0">Assignment Submission</h6>
+            <div class="text-muted small">
+              You can submit only once
+            </div>
+          </div>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+
+        <div class="modal-body">
+          <!-- File Upload -->
+          <div class="mb-3">
+            <label class="form-label">Upload Assignment File</label>
+            <input type="file" id="submissionFile" class="form-control" accept=".pdf,.doc,.docx" />
+            <div class="small text-muted mt-1">
+              Allowed: PDF, DOC, DOCX • Max size: 5 MB
+            </div>
+          </div>
+
+          <!-- Optional Message -->
+          <div class="mb-3">
+            <label class="form-label">
+              Message to Teacher <span class="text-muted">(optional)</span>
+            </label>
+            <textarea id="submissionText" class="form-control" rows="3"
+              placeholder="Any note or explanation for your teacher..."></textarea>
+          </div>
+
+          <div id="submitMsg" class="small mt-2"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="submitAssignmentBtn">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Submission Modal -->
+  <div class="modal fade" id="viewSubmissionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Your Submission</h6>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Uploaded File</label>
+            <div>
+              <a id="viewSubmissionFile" href="#" target="_blank" class="btn btn-sm btn-outline-info">
+                View / Download File
+              </a>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Message to Teacher</label>
+            <div id="viewSubmissionText" class="form-control" style="height:auto"></div>
+          </div>
+
+          <hr />
+
+          <div class="mb-2">
+            <label class="fw-semibold text-light mb-1 d-block">
+              Marks <span class="text-info">(Out of 10)</span>
+            </label>
+            <input type="text" id="viewMarks" class="form-control" disabled placeholder="Not reviewed yet" />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold text-light mb-1 d-block">
+              Teacher Feedback
+            </label>
+            <textarea id="viewFeedback" class="form-control" rows="3" disabled placeholder="No feedback yet"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- STUDENT LOGOUT MODAL -->
+  <div class="logout-modal-backdrop" id="logoutModal">
+    <div class="logout-modal">
+      <div class="logout-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <h5>Logout from CampusMate?</h5>
+      <p>You can log back in anytime to check your attendance and marks.</p>
+
+      <div class="logout-actions">
+        <button class="btn btn-light" id="cancelLogout">Stay</button>
+        <button class="btn btn-primary" id="confirmLogout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutModal = document.getElementById("logoutModal");
+    const cancelLogout = document.getElementById("cancelLogout");
+    const confirmLogout = document.getElementById("confirmLogout");
+
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      logoutModal.style.display = "flex";
+    });
+
+    cancelLogout.addEventListener("click", () => {
+      logoutModal.style.display = "none";
+    });
+
+    confirmLogout.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "student-login.html";
+    });
+  </script>
+
+  <script>
+    updateUnreadBadge();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="appToast" class="toast text-bg-success" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMsg"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showToast(message) {
+      const toastEl = document.getElementById("appToast");
+      const msgEl = document.getElementById("toastMsg");
+
+      msgEl.innerText = message;
+
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+  </script>
+
+</body>
+
+</html>

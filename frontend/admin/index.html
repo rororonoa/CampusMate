@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" href="assets/favicon4.png" />
+  <title>CampusMate — Login</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+      min-height: 100vh;
+    }
+
+    .center-card {
+      max-width: 500px;
+      margin: 8vh auto;
+    }
+
+    .brand-logo {
+      width: 60px;
+      height: 70px;
+      object-fit: contain;
+      margin-right: 5px;
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 600;
+      margin-top: 10px;
+      line-height: 1;
+    }
+
+    .brand-tag {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+    }
+
+    .form-control.has-icon {
+      padding-left: 45px;
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .role-select {
+      border-radius: 8px;
+      cursor: pointer;
+      transition: box-shadow 0.18s ease, transform 0.06s ease;
+      -webkit-appearance: none;
+      appearance: none;
+      padding-right: 2.5rem;
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      background-size: 1rem;
+      /* subtle custom arrow using SVG data URI for consistent look */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5.5a.5.5 0 0 1 .59-.326L8 6.8l4.206-1.626a.5.5 0 0 1 .392.918l-4.5 1.743a.5.5 0 0 1-.356 0L2.81 6.092a.5.5 0 0 1-.326-.592z'/%3E%3C/svg%3E");
+    }
+
+    .role-select:focus {
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    /* ensure select text isn't clipped on some browsers */
+    select.form-select::-ms-expand {
+      display: none;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-block {
+      text-align: left;
+    }
+
+    .small-help {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .input-error {
+      border-color: #dc3545 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="center-card">
+    <!-- Logo + Title aligned to left (old position) -->
+    <div class="brand-row">
+      <div class="brand-left">
+        <img src="assets/favicon5.png" class="brand-logo" alt="CampusMate logo" />
+        <div class="brand-block">
+          <div class="brand-title">CampusMate</div>
+          <div class="brand-tag">Smartly Student Management</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card glass">
+      <div class="card-body p-4">
+        <h4 class="mb-1">Sign In</h4>
+        <p class="muted mb-3">Choose your role and enter your credentials</p>
+
+        <!-- ROLE SELECTOR with placeholder option -->
+        <div class="mb-3">
+          <label class="form-label">Login as</label>
+          <select id="role" class="form-select role-select" required>
+            <option value="" selected disabled>Select your role</option>
+            <option value="admin">Admin</option>
+            <option value="teacher">Teacher</option>
+          </select>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" class="mb-3" autocomplete="off">
+          <div class="mb-3 position-relative">
+            <i class="bi bi-envelope input-icon" aria-hidden="true"></i>
+            <input id="email" type="email" class="form-control has-icon" placeholder="Email" required />
+          </div>
+
+          <div class="mb-3 position-relative">
+            <i class="bi bi-lock input-icon" aria-hidden="true"></i>
+            <input id="password" type="password" class="form-control has-icon" placeholder="Password" required />
+            <i id="togglePassword" class="bi bi-eye-slash" style="
+                  position: absolute;
+                  right: 14px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  cursor: pointer;
+                  color: #6b7280;
+                "></i>
+          </div>
+
+          <div class="d-grid">
+            <button id="loginBtn" class="btn btn-primary" type="submit">
+              <span id="loginLabel">Sign In</span>
+              <span id="loginSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+            </button>
+          </div>
+        </form>
+
+        <div id="msg" class="text-danger small mb-2"></div>
+
+        <div class="d-flex justify-content-start">
+          <div class="footer-note">Need help? Contact IT Department</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center muted mt-3">
+      <strong style="vertical-align: middle">Built by</strong>
+      <img src="assets/campusmate-logo.png" style="width: 30px; height: 25px; margin-left: 3px; margin-right: 5px"
+        alt="logo" />
+      <strong style="vertical-align: middle">CampusMate Team</strong>
+    </p>
+  </div>
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <script>
+    const API = "https://campusmate-backend-3x5c.onrender.com/api";
+
+    const existingToken = localStorage.getItem("token");
+    const existingRole = localStorage.getItem("role");
+
+    if (existingToken && existingRole) {
+      if (existingRole === "admin") {
+        window.location.replace("admin-dashboard.html");
+      } else if (existingRole === "teacher") {
+        window.location.replace("teacher-dashboard.html");
+      }
+    }
+    
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginLabel = document.getElementById("loginLabel");
+    const loginSpinner = document.getElementById("loginSpinner");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.innerText = "";
+
+      // ensure a role is selected
+      const roleVal = document.getElementById("role").value;
+      if (!roleVal) {
+        msg.innerText = "Please select your role.";
+        return;
+      }
+
+      loginLabel.innerText = "Signing in...";
+      loginSpinner.classList.remove("d-none");
+
+      const role = roleVal;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        // Dynamic login endpoint
+        const endpoint =
+          role === "admin" ? "/auth/admin/login" : "/auth/teacher/login"; // teacher endpoint to be added in backend
+
+        const res = await fetch(API + endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          // clear previous error borders
+          document.getElementById("email").classList.remove("input-error");
+          document.getElementById("password").classList.remove("input-error");
+
+          msg.innerText = data.message || "Login failed";
+
+          // highlight specific field
+          if (data.message === "Invalid Email") {
+            document.getElementById("email").classList.add("input-error");
+          }
+
+          if (data.message === "Incorrect Password") {
+            document.getElementById("password").classList.add("input-error");
+          }
+
+          loginLabel.innerText = "Sign In";
+          loginSpinner.classList.add("d-none");
+          return;
+        }
+
+        // Save token and user details
+        localStorage.setItem("token", data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user || data.admin || data.teacher)
+        );
+        localStorage.setItem("role", role);
+
+        // new role-based redirect
+        if (role === "admin") {
+          window.location.replace("admin-dashboard.html");
+        } else if (role === "teacher") {
+          window.location.replace("teacher-dashboard.html");
+        }
+      } catch (error) {
+        msg.innerText = "Server not reachable";
+      }
+
+      loginLabel.innerText = "Sign In";
+      loginSpinner.classList.add("d-none");
+    });
+
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    togglePassword.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePassword.className = isPassword ? "bi bi-eye" : "bi bi-eye-slash";
+    });
+
+    document.getElementById("email").addEventListener("input", () => {
+      document.getElementById("email").classList.remove("input-error");
+    });
+
+    document.getElementById("password").addEventListener("input", () => {
+      document.getElementById("password").classList.remove("input-error");
+    });
+  </script>
+</body>
+
+</html>
