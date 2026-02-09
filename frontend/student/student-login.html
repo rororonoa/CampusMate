@@ -462,6 +462,13 @@
   </div>
 
   <script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
+  </script>
+
+  <script>
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
