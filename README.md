@@ -26,10 +26,6 @@ CampusMate is fully deployed using modern cloud platforms:
 - **Backend API** → Deployed on **Render**
 - **Database** → Hosted on **Railway (MySQL Cloud)**
 
-### 🔗 Live URLs
-- **Admin / Teacher Portal**: [https://campusmate.vercel.app](Admin & Teacher URL) 
-- **Student Portal**: [https://campusmate-student.vercel.app](Student URL)  
-- **Backend API**: https://campusmate-backend-3x5c.onrender.com
 
 > The frontend communicates securely with the live backend API using JWT-based authentication.
 
