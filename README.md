@@ -24,7 +24,7 @@ CampusMate is fully deployed using modern cloud platforms:
 - **Frontend (Admin / Teacher)** → Deployed on **Vercel**
 - **Frontend (Student Portal)** → Deployed on **Vercel** (Seprated for different URL)
 - **Backend API** → Deployed on **Render**
-- **Database** → Hosted on **Railway (MySQL Cloud)**
+- **Database** → Hosted on **Aiven (MySQL Cloud)**
 
 
 > The frontend communicates securely with the live backend API using JWT-based authentication.
